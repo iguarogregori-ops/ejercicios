@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Animado Plus</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Partículas de Fondo */
+        .bg-circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float infinite alternate;
+        }
+
+        .circle:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-duration: 6s; }
+        .circle:nth-child(2) { width: 150px; height: 150px; top: 20%; right: 15%; animation-duration: 8s; opacity: 0.8; }
+        .circle:nth-child(3) { width: 50px; height: 50px; bottom: 15%; left: 20%; animation-duration: 5s; }
+        .circle:nth-child(4) { width: 120px; height: 120px; bottom: 25%; right: 30%; animation-duration: 7s; animation-delay: 1s; }
+        .circle:nth-child(5) { width: 60px; height: 60px; top: 40%; left: 50%; animation-duration: 6.5s; }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); }
+            100% { transform: translateY(-50px) translateX(30px) rotate(10deg); }
+        }
+
+        /* Tarjeta de Login */
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 320px;
+            animation: fadeIn 1.2s ease-in-out;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card h2 {
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #fff;
+            color: #fff;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            color: #ddd;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            top: -15px;
+            font-size: 12px;
+            color: #ffeb3b;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #ffeb3b;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #fdd835;
+            transform: scale(1.02);
+        }
+
+        #mensaje {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-circles">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <div class="login-card">
+        <h2>Bienvenido</h2>
+        <!-- IMPORTANTE: El formulario tiene id="loginForm" -->
+        <form id="loginForm">
+            <div class="input-group">
+                <!-- IMPORTANTE: id="usuario" -->
+                <input type="text" id="usuario" required placeholder=" ">
+                <label>Usuario</label>
+            </div>
+            <div class="input-group">
+                <!-- IMPORTANTE: id="password" -->
+                <input type="password" id="password" required placeholder=" ">
+                <label>Contraseña</label>
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+        <!-- IMPORTANTE: id="mensaje" -->
+        <div id="mensaje"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const usuarioInput = document.getElementById('usuario');
+        const passwordInput = document.getElementById('password');
+        const mensajeDiv = document.getElementById('mensaje');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const usuario = usuarioInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (usuario === '' || password === '') {
+                mensajeDiv.style.color = '#ff6b6b';
+                mensajeDiv.textContent = 'Por favor, completa todos los campos.';
+                return;
+            }
+
+            // Prueba escribiendo: usuario -> admin / contraseña -> 1234
+            if (usuario === 'admin' && password === '1234') {
+                mensajeDiv.style.color = '#51cf66';
+                mensajeDiv.textContent = '¡Inicio de sesión exitoso!';
+                
+                setTimeout(() => {
+                    alert('¡Bienvenido al sistema, ' + usuario + '!');
+                }, 500);
+            } else {
+                mensajeDiv.style.color = '#ff6b6b';
+                mensajeDiv.textContent = 'Usuario o contraseña incorrectos.';
+            }
+        });
+    </script>
+</body>
+</html>
